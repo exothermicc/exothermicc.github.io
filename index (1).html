@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MultiCraft Tiers - Rankings</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #141414;
+            --bg-tertiary: #1a1a1a;
+            --accent-primary: #00ff88;
+            --accent-secondary: #00cc6e;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --text-muted: #666666;
+            --border-color: #2a2a2a;
+            --hover-bg: #1f1f1f;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navigation Sidebar */
+        .nav-sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 240px;
+            height: 100vh;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            padding: 32px 0;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            padding: 0 24px 32px;
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: var(--accent-primary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .nav-items {
+            flex: 1;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 24px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .nav-item:hover {
+            background: var(--hover-bg);
+            color: var(--text-primary);
+        }
+
+        .nav-item.active {
+            background: var(--bg-tertiary);
+            color: var(--accent-primary);
+            border-left: 3px solid var(--accent-primary);
+            padding-left: 21px;
+        }
+
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            opacity: 0.6;
+        }
+
+        .nav-item.active .nav-icon {
+            opacity: 1;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 240px;
+            padding: 48px 64px;
+            min-height: 100vh;
+        }
+
+        .header {
+            margin-bottom: 48px;
+        }
+
+        .header h1 {
+            font-size: 42px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+
+        /* Server Info Card */
+        .server-info {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 48px;
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .server-logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--bg-primary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .server-details h2 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .server-ip {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 18px;
+            color: var(--accent-primary);
+            font-weight: 600;
+        }
+
+        /* Tier Tabs */
+        .tier-tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 32px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+        }
+
+        .tier-tab {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .tier-tab:hover {
+            background: var(--hover-bg);
+            border-color: var(--accent-primary);
+        }
+
+        .tier-tab.active {
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+            color: var(--bg-primary);
+        }
+
+        .tier-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .tier-tab.active .tier-icon {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .tier-name {
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        /* Rankings Table */
+        .rankings-container {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .rankings-header {
+            padding: 24px 32px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .rankings-header h3 {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .player-count {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .rankings-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .rankings-table thead {
+            background: var(--bg-tertiary);
+        }
+
+        .rankings-table th {
+            padding: 16px 32px;
+            text-align: left;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .rankings-table td {
+            padding: 20px 32px;
+            border-top: 1px solid var(--border-color);
+            font-size: 15px;
+        }
+
+        .rankings-table tbody tr {
+            transition: background 0.2s;
+        }
+
+        .rankings-table tbody tr:hover {
+            background: var(--hover-bg);
+        }
+
+        .rank {
+            font-weight: 700;
+            color: var(--text-secondary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .rank.top-1 { color: #FFD700; }
+        .rank.top-2 { color: #C0C0C0; }
+        .rank.top-3 { color: #CD7F32; }
+
+        .player-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .player-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .player-name {
+            font-weight: 600;
+        }
+
+        .tier-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .tier-stone { background: #888; color: #000; }
+        .tier-iron { background: #d4d4d4; color: #000; }
+        .tier-gold { background: #FFD700; color: #000; }
+        .tier-diamond { background: #00CED1; color: #000; }
+        .tier-netherite { background: #CD853F; color: #000; }
+
+        .region {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 64px;
+            padding-top: 32px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .nav-sidebar {
+                width: 80px;
+            }
+
+            .logo {
+                font-size: 20px;
+            }
+
+            .nav-item span {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 80px;
+                padding: 32px 24px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                flex-direction: row;
+                padding: 16px;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 24px 16px;
+            }
+
+            .tier-tabs {
+                flex-wrap: nowrap;
+                overflow-x: scroll;
+            }
+
+            .rankings-table th,
+            .rankings-table td {
+                padding: 12px 16px;
+            }
+
+            .server-info {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .rankings-table tbody tr {
+            animation: fadeInUp 0.3s ease forwards;
+            opacity: 0;
+        }
+
+        .rankings-table tbody tr:nth-child(1) { animation-delay: 0.05s; }
+        .rankings-table tbody tr:nth-child(2) { animation-delay: 0.1s; }
+        .rankings-table tbody tr:nth-child(3) { animation-delay: 0.15s; }
+        .rankings-table tbody tr:nth-child(4) { animation-delay: 0.2s; }
+        .rankings-table tbody tr:nth-child(5) { animation-delay: 0.25s; }
+        .rankings-table tbody tr:nth-child(6) { animation-delay: 0.3s; }
+        .rankings-table tbody tr:nth-child(7) { animation-delay: 0.35s; }
+        .rankings-table tbody tr:nth-child(8) { animation-delay: 0.4s; }
+        .rankings-table tbody tr:nth-child(9) { animation-delay: 0.45s; }
+        .rankings-table tbody tr:nth-child(10) { animation-delay: 0.5s; }
+    </style>
+</head>
+<body>
+    <!-- Navigation Sidebar -->
+    <nav class="nav-sidebar">
+        <div class="logo">MCTIERS</div>
+        <div class="nav-items">
+            <a href="#" class="nav-item">
+                <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
+                </svg>
+                <span>Home</span>
+            </a>
+            <a href="#" class="nav-item active">
+                <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/>
+                </svg>
+                <span>Rankings</span>
+            </a>
+            <a href="#" class="nav-item">
+                <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z"/>
+                    <path d="M15 7v2a4 4 0 01-4 4H9.828l-1.766 1.767c.28.149.599.233.938.233h2l3 3v-3h2a2 2 0 002-2V9a2 2 0 00-2-2h-1z"/>
+                </svg>
+                <span>Discord</span>
+            </a>
+            <a href="#" class="nav-item">
+                <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                </svg>
+                <span>API Docs</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <div class="header">
+            <h1>Overall Rankings</h1>
+            <p>Top players across all game modes in MultiCraft</p>
+        </div>
+
+        <!-- Server Info -->
+        <div class="server-info">
+            <div class="server-logo">MC</div>
+            <div class="server-details">
+                <h2>Server IP</h2>
+                <div class="server-ip">multicraft.server.net</div>
+            </div>
+        </div>
+
+        <!-- Tier Tabs -->
+        <div class="tier-tabs">
+            <div class="tier-tab active">
+                <div class="tier-icon">🏆</div>
+                <div class="tier-name">Overall</div>
+            </div>
+            <div class="tier-tab">
+                <div class="tier-icon">⚔️</div>
+                <div class="tier-name">Vanilla</div>
+            </div>
+            <div class="tier-tab">
+                <div class="tier-icon">🛡️</div>
+                <div class="tier-name">UHC</div>
+            </div>
+            <div class="tier-tab">
+                <div class="tier-icon">🗡️</div>
+                <div class="tier-name">Sword</div>
+            </div>
+            <div class="tier-tab">
+                <div class="tier-icon">🪓</div>
+                <div class="tier-name">Axe</div>
+            </div>
+            <div class="tier-tab">
+                <div class="tier-icon">🔨</div>
+                <div class="tier-name">Mace</div>
+            </div>
+            <div class="tier-tab">
+                <div class="tier-icon">🌍</div>
+                <div class="tier-name">SMP</div>
+            </div>
+        </div>
+
+        <!-- Rankings Table -->
+        <div class="rankings-container">
+            <div class="rankings-header">
+                <h3>Top Players</h3>
+                <div class="player-count">2,847 registered players</div>
+            </div>
+            <table class="rankings-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Player</th>
+                        <th>Region</th>
+                        <th>Tier</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="rank top-1">#1</span></td>
+                        <td>
+                            <div class="player-info">
+                                <div class="player-avatar"></div>
+                                <span class="player-name">DreamBuilder</span>
+                            </div>
+                        </td>
+                        <td><span class="region">NA</span></td>
+                        <td><span class="tier-badge tier-netherite">NETHERITE</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="rank top-2">#2</span></td>
+                        <td>
+                            <div class="player-info">
+                                <div class="player-avatar" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></div>
+                                <span class="player-name">MineKing</span>
+                            </div>
+                        </td>
+                        <td><span class="region">EU</span></td>
+                        <td><span class="tier-badge tier-netherite">NETHERITE</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="rank top-3">#3</span></td>
+                        <td>
+                            <div class="player-info">
+                                <div class="player-avatar" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);"></div>
+                                <span class="player-name">CraftMaster</span>
+                            </div>
+                        </td>
+                        <td><span class="region">AS</span></td>
+                        <td><span class="tier-badge tier-diamond">DIAMOND</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="rank">#4</span></td>
+                        <td>
+                            <div class="player-info">
+                                <div class="player-avatar" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);"></div>
+                                <span class="player-name">BlockBreaker</span>
+                            </div>
+                        </td>
+                        <td><span class="region">NA</span></td>
+                        <td><span class="tier-badge tier-diamond">DIAMOND</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="rank">#5</span></td>
+                        <td>
+                            <div class="player-info">
+                                <div class="player-avatar" style="background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);"></div>
+                                <span class="player-name">PixelHero</span>
+                            </div>
+                        </td>
+                        <td><span class="region">EU</span></td>
+                        <td><span class="tier-badge tier-diamond">DIAMOND</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="rank">#6</span></td>
+                        <td>
+                            <div class="player-info">
+                                <div class="player-avatar" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);"></div>
+                                <span class="player-name">VoxelWarrior</span>
+                            </div>
+                        </td>
+                        <td><span class="region">NA</span></td>
+                        <td><span class="tier-badge tier-gold">GOLD</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="rank">#7</span></td>
+                        <td>
+                            <div class="player-info">
+                                <div class="player-avatar" style="background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);"></div>
+                                <span class="player-name">StoneLegend</span>
+                            </div>
+                        </td>
+                        <td><span class="region">AS</span></td>
+                        <td><span class="tier-badge tier-gold">GOLD</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="rank">#8</span></td>
+                        <td>
+                            <div class="player-info">
+                                <div class="player-avatar" style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);"></div>
+                                <span class="player-name">CubeChampion</span>
+                            </div>
+                        </td>
+                        <td><span class="region">EU</span></td>
+                        <td><span class="tier-badge tier-gold">GOLD</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="rank">#9</span></td>
+                        <td>
+                            <div class="player-info">
+                                <div class="player-avatar" style="background: linear-gradient(135deg, #ff6e7f 0%, #bfe9ff 100%);"></div>
+                                <span class="player-name">GridExplorer</span>
+                            </div>
+                        </td>
+                        <td><span class="region">NA</span></td>
+                        <td><span class="tier-badge tier-iron">IRON</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="rank">#10</span></td>
+                        <td>
+                            <div class="player-info">
+                                <div class="player-avatar" style="background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);"></div>
+                                <span class="player-name">TerrainTitan</span>
+                            </div>
+                        </td>
+                        <td><span class="region">AS</span></td>
+                        <td><span class="tier-badge tier-iron">IRON</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>Copyrights © MultiCraft Tiers 2026</p>
+            <p style="margin-top: 8px;">Powered by Luanti - Build and Mine</p>
+        </div>
+    </main>
+</body>
+</html>
