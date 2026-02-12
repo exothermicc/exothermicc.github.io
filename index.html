@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MultiCraft Tiers Server - Build and Mine</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a472a 0%, #2d5a3d 50%, #1a472a 100%);
+            color: #fff;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            margin-bottom: 40px;
+            border: 2px solid #4a7c59;
+        }
+
+        header h1 {
+            font-size: 3.5em;
+            margin-bottom: 10px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+            color: #7CFC00;
+        }
+
+        header p {
+            font-size: 1.3em;
+            color: #b8e6c9;
+        }
+
+        .server-info {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 5px solid #7CFC00;
+        }
+
+        .server-info h2 {
+            color: #7CFC00;
+            margin-bottom: 15px;
+            font-size: 2em;
+        }
+
+        .info-box {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        .info-box strong {
+            color: #7CFC00;
+        }
+
+        .tiers-section {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .tiers-section h2 {
+            color: #7CFC00;
+            margin-bottom: 20px;
+            font-size: 2em;
+            text-align: center;
+        }
+
+        .tier-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .tier-card {
+            background: linear-gradient(135deg, rgba(74, 124, 89, 0.3), rgba(42, 71, 52, 0.3));
+            padding: 25px;
+            border-radius: 10px;
+            border: 2px solid;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .tier-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(124, 252, 0, 0.3);
+        }
+
+        .tier-card h3 {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .tier-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .tier-card li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tier-card li:before {
+            content: "⛏ ";
+            margin-right: 8px;
+        }
+
+        .tier-card li:last-child {
+            border-bottom: none;
+        }
+
+        .tier-stone {
+            border-color: #888;
+        }
+
+        .tier-stone h3 {
+            color: #aaa;
+        }
+
+        .tier-iron {
+            border-color: #d4d4d4;
+        }
+
+        .tier-iron h3 {
+            color: #e8e8e8;
+        }
+
+        .tier-gold {
+            border-color: #FFD700;
+        }
+
+        .tier-gold h3 {
+            color: #FFD700;
+        }
+
+        .tier-diamond {
+            border-color: #00CED1;
+        }
+
+        .tier-diamond h3 {
+            color: #00CED1;
+        }
+
+        .tier-netherite {
+            border-color: #8B4513;
+        }
+
+        .tier-netherite h3 {
+            color: #CD853F;
+        }
+
+        .features {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .features h2 {
+            color: #7CFC00;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        .features ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .features li {
+            padding: 12px 20px;
+            margin: 10px 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            border-left: 4px solid #7CFC00;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            margin-top: 40px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 15px 40px;
+            background: #7CFC00;
+            color: #1a472a;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-top: 20px;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .cta-button:hover {
+            background: #90EE90;
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2.5em;
+            }
+
+            .tier-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⛏ MultiCraft Tiers Server</h1>
+            <p>Build and Mine - Powered by Luanti</p>
+        </header>
+
+        <div class="server-info">
+            <h2>Server Information</h2>
+            <div class="info-box">
+                <strong>Server IP:</strong> your-server-ip.com
+            </div>
+            <div class="info-box">
+                <strong>Port:</strong> 30000
+            </div>
+            <div class="info-box">
+                <strong>Version:</strong> Luanti (MultiCraft Build and Mine)
+            </div>
+            <div class="info-box">
+                <strong>Game Mode:</strong> Survival with Progression Tiers
+            </div>
+        </div>
+
+        <div class="tiers-section">
+            <h2>Progression Tiers</h2>
+            <p style="text-align: center; margin-bottom: 30px; font-size: 1.1em;">
+                Advance through ranks by completing challenges, gathering resources, and building amazing creations!
+            </p>
+
+            <div class="tier-grid">
+                <div class="tier-card tier-stone">
+                    <h3>⚪ Stone Tier</h3>
+                    <ul>
+                        <li>Starting tier for all players</li>
+                        <li>Basic building permissions</li>
+                        <li>Access to starter areas</li>
+                        <li>3 home points</li>
+                        <li>Join the community</li>
+                    </ul>
+                </div>
+
+                <div class="tier-card tier-iron">
+                    <h3>⚙ Iron Tier</h3>
+                    <ul>
+                        <li>Expanded building rights</li>
+                        <li>Access to /tpa command</li>
+                        <li>5 home points</li>
+                        <li>Market stall access</li>
+                        <li>Vote rewards bonus</li>
+                    </ul>
+                </div>
+
+                <div class="tier-card tier-gold">
+                    <h3>🌟 Gold Tier</h3>
+                    <ul>
+                        <li>Creative mode in plot world</li>
+                        <li>Access to rare resources</li>
+                        <li>8 home points</li>
+                        <li>Custom item naming</li>
+                        <li>Priority support</li>
+                    </ul>
+                </div>
+
+                <div class="tier-card tier-diamond">
+                    <h3>💎 Diamond Tier</h3>
+                    <ul>
+                        <li>Exclusive diamond areas</li>
+                        <li>Advanced WorldEdit tools</li>
+                        <li>12 home points</li>
+                        <li>Create public warps</li>
+                        <li>Colored chat names</li>
+                    </ul>
+                </div>
+
+                <div class="tier-card tier-netherite">
+                    <h3>🔥 Netherite Tier</h3>
+                    <ul>
+                        <li>Ultimate building freedom</li>
+                        <li>Full WorldEdit access</li>
+                        <li>Unlimited home points</li>
+                        <li>Server event hosting</li>
+                        <li>Legacy status</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="features">
+            <h2>Server Features</h2>
+            <ul>
+                <li>🏗️ Custom progression system with exciting rewards at each tier</li>
+                <li>🌍 Massive survival world with protected building zones</li>
+                <li>🎨 Creative plots for Diamond+ tier members</li>
+                <li>🛒 Player-run economy and marketplace</li>
+                <li>⚔️ PvP arenas and mini-games</li>
+                <li>🏆 Regular building competitions and events</li>
+                <li>👥 Friendly, mature community</li>
+                <li>🔧 Active staff and regular updates</li>
+                <li>📱 Cross-platform support (PC, Mobile, Tablet)</li>
+                <li>💾 Daily backups to protect your creations</li>
+            </ul>
+        </div>
+
+        <footer>
+            <h2>Ready to Start Your Journey?</h2>
+            <p>Join hundreds of players building, mining, and exploring together!</p>
+            <a href="#" class="cta-button">Join Our Discord</a>
+            <p style="margin-top: 30px; color: #b8e6c9;">
+                MultiCraft: Build and Mine is built on Luanti, the free and open-source voxel game engine.
+            </p>
+        </footer>
+    </div>
+</body>
+</html>
